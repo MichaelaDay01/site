@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Day</title>
+    <meta name="description" content="Studio Day is the motion design practice of Michaela Day." /> 
+    <meta name="keywords" content="" />
+    <meta name="author" content="Studio Day" />
+    <meta property="og:title" content="Studio Day" />
+    <meta property="og:site_name" content="Studio Day" />
+    <meta property="og:description" content="Studio Day is the motion design practice of Michaela Day." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://michaela.day" />
+    <meta property="og:image" content="./assets/og_image_logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="800" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <link rel="canonical" href="https://michaela.day" />
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-smoothing: antialiased;
+        backface-visibility: hidden;
+      }
+
+      a {
+        color: black;
+        text-decoration: none;
+      }
+
+      tt {
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: -0.02em;
+        display: inline-block;
+
+        a {
+          color: inherit;
+          animation: blink 1s infinite;
+        }
+      }
+
+      #identity {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-grow: 1;
+        position: absolute;
+        right: 20px;
+        left: 20px;
+        top: 20px;
+        z-index: 3;
+        user-select: none;
+        color: #777;
+      }
+
+      #identity:has(~ #carousel label[theme="light"] input:checked) {
+        color: white;
+      }
+
+      #identity:has(~ #carousel label[theme="neutral"] input:checked) {
+        color: grey;
+      }
+
+      #identity:has(~ #carousel label[theme="dark"] input:checked) {
+        color: black;
+      }
+
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        20% { opacity: 0.6; }
+      }
+
+      #carousel {
+        display: flex;
+        align-items: flex-end;
+        position: relative;
+        height: 100dvh;
+        user-select: none;
+        padding: 0 12px;
+      }
+
+      label {
+        z-index: 1;
+        flex-grow: 1;
+
+        input {
+          position: absolute;
+          display: none;
+        }
+        
+        .incrementor {
+          position: absolute;
+          width: 50%;
+          top: 0;
+          left: -50vw;
+          bottom: 48px;
+        }
+
+        .tab {
+          height: 48px;
+          padding: 0 8px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          cursor: pointer;
+          position: relative;
+
+          div {
+            height: 2px;
+            width: 100%;
+            z-index: 2;
+            background: white;
+            opacity: 0.25;
+            transform-origin: center center;
+            transition: transform 0.3s, opacity 0.4s, scale 0.2s;
+          }
+        }
+
+        .content {
+          z-index: -1;
+          visibility: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          overflow: hidden;
+          top: 0px;
+          right: 0px;
+          bottom: 0px;
+          left: 0px;
+
+          video, img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          video:not(.device) {
+            height: calc(100% + 4px);
+            width: calc(100% + 4px);
+            margin: -2px 0 0 -2px;
+            clip-path: inset(1px);
+          }
+
+          .contain {
+            object-fit: contain;
+          }
+        }
+
+        .information {
+          display: grid;
+          grid-template-columns: 2fr 8fr;
+          grid-gap: 8px;
+          position: absolute;
+          right: 20px;
+          bottom: 44px;
+          left: 20px;
+          opacity: 0;
+          pointer-events: none;
+          z-index: 3;
+        }
+
+        &[theme="light"] {
+          .content {
+            background: black;
+            .device {
+              border-color: rgba(255,255,255,0.05);
+              outline-color: rgba(255,255,255,0.1);
+            }
+          }
+          .information {
+            color: white;
+          }
+        }
+        &[theme="neutral"] {
+          .content {
+            background: #ccc;
+          }
+          .information {
+            color: #aaa;
+          }
+        }
+        &[theme="dark"] {
+          .content {
+            background: #eee;
+          }
+          .information {
+            color: black;
+          }
+        }
+
+        &:has(input:checked) {
+          z-index: 0;
+
+          .information {
+            opacity: 1;
+          }
+
+          .content {
+            visibility: visible;
+          }
+
+          .tab div {
+            opacity: 0.9 !important;
+          }
+        }
+
+        .tab:hover {
+          div {
+            transform: scaleY(4) !important;
+          }
+          & + .information {
+            opacity: 1;
+          }
+        }
+
+        .tab:active div {
+          scale: 1 0.95;
+        }
+
+        &:has(+ label .tab:hover),
+        &:has(.tab:hover) + label {
+          .tab div {
+            transform: scaleY(1.4);
+          }
+        }
+      }
+
+      body:has(.tab:hover) {
+        .tab div {
+          transform: scaleY(1.1);
+          opacity: 0.4;
+        }
+      }
+
+      #carousel:has(label:first-child > input:checked) > label:last-child .incrementor,
+      #carousel label:has(+ label > input:checked) .incrementor {
+        transform: translateX(50vw);
+        cursor: w-resize;
+      }
+
+      #carousel:has(label:last-child > input:checked) > label:first-child .incrementor,
+      #carousel label:has(> input:checked) + label .incrementor {
+        transform: translateX(100vw);
+        cursor: e-resize;
+      }
+
+      @media (min-width: 501px) {
+        label[theme="light"]:has(> input:checked),
+        label[theme="light"]:has(> input:checked) ~ label,
+        label:has(~ label[theme="light"] input:checked) {
+          .information {
+            color: #fff;
+          }
+        }
+
+        label[theme="neutral"]:has(> input:checked),
+        label[theme="neutral"]:has(> input:checked) ~ label,
+        label:has(~ label[theme="neutral"] input:checked) {
+          .information {
+            color: #aaa;
+          }
+        }
+
+        label[theme="dark"]:has(> input:checked),
+        label[theme="dark"]:has(> input:checked) ~ label,
+        label:has(~ label[theme="dark"] input:checked) {
+          .information {
+            color: #000;
+          }
+          .tab div {
+            background: #777;
+          }
+        }
+      }
+
+      @media (max-width: 500px) {
+        #identity {
+          pointer-events: auto;
+        }
+
+        #carousel {
+          overflow: scroll;
+          flex-direction: column;
+          scroll-snap-type: y mandatory;
+          scroll-padding: 0;
+          background: black;
+          padding: 0;
+
+          label {
+            position: relative;
+            scroll-snap-align: start;
+
+            .content {
+              position: static;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              visibility: visible;
+              opacity: 1;
+              overflow: hidden;
+              height: 80vh;
+              width: 100vw;
+
+
+              video, img {
+                display: block;
+              }
+              
+              .device {
+                border-radius: 12px;
+              }
+
+              .mortal_identity {
+                width: 140%;
+              }
+            }
+
+            .device-content {
+              padding: 20px;
+              gap: 15px;
+            }
+
+            .information {
+              opacity: 1;
+              display: grid;
+              grid-template-columns: 1fr;
+              bottom: 20px;
+            }
+
+            .tab,
+            .incrementor,
+            .project {
+              display: none;
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <section id="identity">
+      <tt>Studio Day is the motion design practice of Michaela Day.</tt>
+      <tt><a href="mailto:studio@michaela.day">[Email]</a></tt>
+    </section>
+
+    <section id="carousel">
+      <label project="Eight Sleep V3" theme="light">
+        <input type="radio" name="item" checked />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Eight Sleep</tt>
+          <tt class="title">Motion and interaction design for Eight Sleep’s Mobile App [Confidential]</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content">
+          <img fetchpriority="high" alt="Eight Sleep" src="./content/compressed/eight_sleep.png" />
+        </div>
+      </label>
+
+      <label project="Bocci 20 Year Anniversary Logo" theme="light">
+        <input type="radio" name="item" />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Bocci</tt>
+          <tt class="title">Motion design for Bocci’s 20 Year Anniversary campaign</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content">
+          <video muted loop playsinline data-src="bocci_logo_1" data-src-mobile="bocci_logo_1_mobile" />
+        </div>
+      </label>
+
+      <label project="Specter Identity" theme="light">
+        <input type="radio" name="item" />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Specter</tt>
+          <tt class="title">Motion design for Specter’s Logo & Marketing Assets</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content">
+          <video muted loop playsinline data-src="specter_identity" />
+        </div>
+      </label>
+
+      <label project="Specter Identity" theme="light">
+        <input type="radio" name="item" />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Specter</tt>
+          <tt class="title">Motion design for Specter’s Logo & Marketing Assets</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content">
+          <video class="contain" fetchpriority="low" muted loop playsinline data-src="specter_keys_coins" />
+        </div>
+      </label>
+
+      <label project="Walden Identity" theme="dark">
+        <input type="radio" name="item" />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Walden</tt>
+          <tt class="title">Motion and graphic design for Walden’s Identity</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content" style="background: #FAF8F5;">
+          <video class="contain" fetchpriority="low" muted loop playsinline data-src="walden_identity" />
+        </div>
+      </label>
+
+      <label project="Programme Identity" theme="light">
+        <input type="radio" name="item" />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Programme</tt>
+          <tt class="title">Motion design for Programme’s Identity, and marketing assets</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content">
+          <video class="contain" fetchpriority="low" muted loop playsinline data-src="programme_identity" />
+        </div>
+      </label>
+
+      <label project="Programme Features" theme="light">
+        <input type="radio" name="item" />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Programme</tt>
+          <tt class="title">Motion design for Programme’s Identity, and marketing assets</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content" style="background: #0a0a0a">
+          <video class="contain" fetchpriority="low" muted loop playsinline data-src="programme_equipment" />
+        </div>
+      </label>
+
+      <label project="Cosign" theme="light">
+        <input type="radio" name="item" />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Cosign</tt>
+          <tt class="title">Created prototypes for Cosign’s product</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content">
+          <video class="contain" muted loop playsinline data-src="cosign" />
+        </div>
+      </label>
+
+      <label project="Obscura" theme="light">
+        <input type="radio" name="item" />
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Obscura</tt>
+          <tt class="title">Created a motion design asset to visualize Obscura’s new VPN architecture</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content" style="background: #1A1A1A;">
+          <video class="contain" muted loop playsinline data-src="obscura_dark" data-src-mobile="obscura_dark_mobile" />
+        </div>
+      </label>
+
+      <label project="Mortal Identity" theme="light">
+        <input type="radio" name="item" project/>
+        <div class="incrementor"></div>
+        <div class="information">
+          <tt class="project">Mortal</tt>
+          <tt class="title">Developed Mortal’s motion behavior for their brand identity</tt>
+        </div>
+        <div class="tab">
+          <div></div>
+        </div>
+        <div class="content">
+          <video class="contain mortal_identity" fetchpriority="low" muted loop playsinline data-src="mortal_identity_short" />
+        </div>
+      </label>
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const carousel = document.getElementById('carousel');
+        const labels = document.querySelectorAll('label');
+        const videos = document.querySelectorAll('video');
+        const radioInputs = document.querySelectorAll('input[type="radio"]');
+        const p = performance.getEntriesByName(window.location)[0];
+        const loadTime = Math.round(p.responseEnd - p.requestStart);
+        let inactivityTimeout;
+        let cycleInterval;
+
+        if (isMac && isSafari) {
+          document.querySelectorAll('source[src$=".webm"]').forEach(source => {
+            const video = source.parentElement;
+            source.remove()
+            video.load();
+          })
+        }
+
+        function selectRadio(input) {
+          input.checked = true;
+          input.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+        }
+
+        function selectNextRadio() {
+          let index = Array.from(radioInputs).findIndex((radio) => radio.checked);
+          let nextIndex = (index + 1) % radioInputs.length;
+          selectRadio(radioInputs[nextIndex])
+        }
+
+        function startCycling() {
+          cycleInterval = setInterval(selectNextRadio, 3000);
+        }
+
+        function resetInactivityTimeout() {
+          clearTimeout(inactivityTimeout);
+          clearInterval(cycleInterval);
+          inactivityTimeout = setTimeout(() => window.innerWidth > 500 ? startCycling() : null , 20000);
+        }
+
+        radioInputs.forEach(input => {
+          input.addEventListener('click', resetInactivityTimeout);
+        });
+
+        window.addEventListener('resize', () => window.innerWidth <= 500 ? clearInterval(cycleInterval) : null);
+
+        if (window.innerWidth > 500) resetInactivityTimeout();
+
+        window.addEventListener("keydown", function (e) {
+          let index = Array.from(radioInputs).findIndex((radio) => radio.checked);
+          if (index === -1) index = 0;
+          if (e.key === "ArrowRight" || e.key === "l" || e.key === "d") {
+            index = (index + 1) % radioInputs.length;
+          } else if (e.key === "ArrowLeft" || e.key === "h" || e.key === "a") {
+            index = (index - 1 + radioInputs.length) % radioInputs.length;
+          }
+
+          selectRadio(radioInputs[index])
+          resetInactivityTimeout();
+        });
+
+        const themeObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const radioInput = entry.target.querySelector('input[type="radio"]');
+              if (radioInput) {
+                selectRadio(radioInput)
+              }
+            }
+          })
+        }, {
+          root: carousel,
+          rootMargin: `-50px 0px -${carousel.offsetHeight - 50}px 0px`,
+          threshold: 0,
+        });
+
+        const videoLoadingObserver = new IntersectionObserver((entries) => {
+          entries.forEach(({ target: video, isIntersecting }) => {
+            if (video.dataset.src) {
+              if (isIntersecting) {
+                loadVideo(video);
+              } else {
+                unloadVideo(video);
+              }
+            }
+          });
+        }, { 
+          root: carousel,
+          rootMargin: `${carousel.offsetHeight - 20}px 0px ${carousel.offsetHeight - 20}px 0px`,
+          threshold: 0,
+        });
+
+        /*
+        const videoPlayingObserver = new IntersectionObserver((entries) => {
+          entries.forEach(({ target: video, isIntersecting }) => {
+            if (isIntersecting) {
+              video.play();
+            } else {
+              video.pause();
+            }
+          });
+        }, { 
+          root: carousel,
+          threshold: 0,
+        });
+        */
+
+        function loadVideo(video) {
+          let src = "./content/compressed/";
+
+          if (window.innerWidth < 575 && video.dataset.srcMobile) {
+            src = src + video.dataset.srcMobile;
+          } else {
+            src = src + video.dataset.src;
+          }
+
+          const formats = {
+            "video/mp4; codecs=hevc": "_h265.mp4",
+            "video/webm; codecs=vp9": ".webm",
+            "video/mp4; codecs=avc1": "_h264.mp4" 
+          };
+
+          if (isSafari) {
+            delete formats["video/webm; codecs=vp9"]
+          }
+
+          const format = Object.keys(formats).find(format => video.canPlayType(format) !== '');
+
+          video.src = src + formats[format];
+          video.load();
+          video.play();
+        }
+
+        function unloadVideo(video) {
+          video.src = '';
+          video.load();
+        }
+
+        labels.forEach(label => themeObserver.observe(label));
+        videos.forEach(video => videoLoadingObserver.observe(video));
+
+        if (isSafari) {
+          console.log(`Designed & engineered by OTK Studio`);
+        } else {
+          console.log(`\n   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  \n   ░▒▓██████▓▒░░░▒▓█████████▓▒░▒▓█▓▒░░░▒▓█▓▒░░ \n ░▒▓█▓▒░░░░▒▓█▓▒░░░░░▒▓█▓▒░░░░░▒▓█▓▒░░▒▓█▓▒░░ \n░▒▓█▓▒░░░░░░▒▓█▓▒░░░░▒▓█▓▒░░░░░▒▓█▓▒░▒▓█▓▒░░  \n░▒▓█▓▒░░░░░░▒▓█▓▒░░░░▒▓█▓▒░░░░░▒▓██████▓▒░░░  \n░▒▓█▓▒░░░░░░▒▓█▓▒░░░░▒▓█▓▒░░░░░▒▓█▓▒░▒▓█▓▒░░  \n ░▒▓█▓▒░░░░▒▓█▓▒░░░░░▒▓█▓▒░░░░░▒▓█▓▒░░▒▓█▓▒░░ \n   ░▒▓██████▓▒░░░░░░░▒▓█▓▒░░░░░▒▓█▓▒░░░▒▓█▓▒░░ \n   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  \n\n      Designed & engineered by OTK Studio \n\n`);
+        }
+      })
+    </script>
+  </body>
+</html>
